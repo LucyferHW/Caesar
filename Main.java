@@ -1,8 +1,8 @@
-import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
 
@@ -23,17 +23,6 @@ public class Main {
 
         scanner.close();
         System.out.println("Programm beendet.");
-    }
-
-    // Datenträgerklasse, damit du Inhalt und Dateiinfo gemischt zurückgeben kannst
-    private static class InputResult {
-        String text;
-        String sourceFilePath; // null, falls aus Konsole
-
-        InputResult(String text, String sourceFilePath) {
-            this.text = text;
-            this.sourceFilePath = sourceFilePath;
-        }
     }
 
     private static boolean askRepeat(Scanner scanner) {
@@ -169,10 +158,12 @@ public class Main {
                 hatOutput = true;
                 break;
             case 3:
-                System.out.println("Du trinkst Wasser.");
+                output = new Hack(new Caesar(inputResult.text, null, 0)).brutForce(CodeEnum.CODE).toString();
+                System.out.println("\nCoded: " + output);
                 break;
             case 4:
-                // Noch nicht implementiert
+                output = new Hack(new Caesar(null, inputResult.text, 0)).brutForce(CodeEnum.DECODE).toString();
+                System.out.println("\nCoded: " + output);
                 break;
         }
 
@@ -197,11 +188,20 @@ public class Main {
         String ext = (dot != -1) ? name.substring(dot) : "";
         String suffix = "";
         switch (option) {
-            case 1: suffix = "_Coded"; break;
-            case 2: suffix = "_Decoded"; break;
-            case 3: suffix = "_TableCoded"; break;
-            case 4: suffix = "_TableDecoded"; break;
-            default: suffix = "_Output";
+            case 1:
+                suffix = "_Coded";
+                break;
+            case 2:
+                suffix = "_Decoded";
+                break;
+            case 3:
+                suffix = "_TableCoded";
+                break;
+            case 4:
+                suffix = "_TableDecoded";
+                break;
+            default:
+                suffix = "_Output";
         }
         // Im selben Verzeichnis wie Ursprungsdatei:
         return file.getParent() != null ?
@@ -216,6 +216,17 @@ public class Main {
             return true;
         } catch (IOException e) {
             return false;
+        }
+    }
+
+    // Datenträgerklasse, damit du Inhalt und Dateiinfo gemischt zurückgeben kannst
+    private static class InputResult {
+        String text;
+        String sourceFilePath; // null, falls aus Konsole
+
+        InputResult(String text, String sourceFilePath) {
+            this.text = text;
+            this.sourceFilePath = sourceFilePath;
         }
     }
 }
